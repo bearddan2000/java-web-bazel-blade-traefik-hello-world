@@ -88,19 +88,15 @@ function usage() {
 }
 function start-up(){
 
-    scope="start-up"
-    docker_img_name=`head -n 1 README.md | sed 's/# //'`
-    info_base="[$timestamp INFO]: $basefile::$scope"
+    local scope="start-up"
+    local docker_img_name=`head -n 1 README.md | sed 's/# //'`
+    local info_base="[$timestamp INFO]: $basefile::$scope"
 
     echo "$info_base started" >> $logfile
 
-    echo "$info_base build image" >> $logfile
+    echo "$info_base starting services" >> $logfile
 
-    sudo docker build -t $docker_img_name .
-
-    sudo docker run --rm -p 80:9000 $docker_img_name
-
-    echo "$info_base running image" >> $logfile
+    sudo docker-compose up --build
 
     echo "$info_base ended" >> $logfile
 
@@ -113,7 +109,9 @@ function tear-down(){
 
     echo "$info_base started" >> $logfile
 
-    echo "$info_base stoping services" >> $logfile
+    echo "$info_base starting services" >> $logfile
+
+    sudo docker-compose down
 
     echo "$info_base ended" >> $logfile
 
